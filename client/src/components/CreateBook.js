@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const CreateBook = () => {
     const [bookData, setBookData] = useState({
@@ -116,6 +117,12 @@ const CreateBook = () => {
                     </button>
                 </fieldset>
             </form>
+             <Link
+                                                            to={`/updatebook/${book._id}`}
+                                                            className="btn btn-primary"
+                                                        >
+                                                            Edit
+                                                        </Link>
         </div>
     );
 };
