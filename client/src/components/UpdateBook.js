@@ -18,7 +18,7 @@ const UpdateBook = () => {
     const getData = async () => {
         try {
             const response = await axios.get(
-                `http://localhost:9999/api/getbook/${id}`
+                `https://bookshopwithmernstack-2.onrender.com/api/getbook/${id}`
             );
 
             const book = response.data.bdi;
@@ -53,7 +53,7 @@ const UpdateBook = () => {
 
         try {
             const response = await axios.put(
-                `http://localhost:9999/api/updateBook/${id}`,
+                `https://bookshopwithmernstack-2.onrender.com/api/updateBook/${id}`,
                 bdata
             );
 

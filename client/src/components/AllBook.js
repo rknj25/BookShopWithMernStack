@@ -9,7 +9,7 @@ const AllBook = () => {
     const getBook = async () => {
         try {
             const response = await axios.get(
-                'http://localhost:9999/api/viewbook'
+                'https://bookshopwithmernstack-2.onrender.com/api/viewbook'
             );
 
             setBookdata(response.data.bd);
@@ -25,7 +25,7 @@ const AllBook = () => {
     const dltBook = async (id) => {
         try {
             const response = await axios.delete(
-                `http://localhost:9999/api/deleteBook/${id}`
+                `https://bookshopwithmernstack-2.onrender.com/api/deleteBook/${id}`
             );
 
             alert(response.data.message);
