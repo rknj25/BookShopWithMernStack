@@ -1,116 +1,120 @@
+
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const AllBook = () => {
-    const [bookdata,setBookdata]=useState([]);
+    const [bookdata, setBookdata] = useState([]);
 
-    const table={
-    width:"500px",
-    padding:"10px",
-    margin:"auto",
-    borderRadius: "10px"
-  }
+    const getBook = async () => {
+        try {
+            const response = await axios.get(
+                'http://localhost:9999/api/viewbook'
+            );
 
-
-    useEffect(()=>{
-        axios.get('http://localhost:9999/api/viewbook')
-        .then(response=>{
-            setBookdata(response.data);
-        })
-        .catch(error=>{
+            setBookdata(response.data.bd);
+        } catch (error) {
             console.error(error);
-            
-        });
-    },[])
-  return (
-    <div>
-        
-        <table border={1} style={table}>
-            <h1>All Book</h1>
-            <tr>
-                <th>BookName</th>
-                <th>BookAuthor</th>
-                <th>BookPrice</th>
-            </tr>
-            {
-                bookdata.map((book)=>(
-                    <tr>
-                        <td>{book.book_name}</td>
-                        <td>{book.book_author}</td>
-                        <td>{book.book_price}</td>
-                    </tr>
-                ))
-            }
-        </table>
-    </div>
-  )
-}
+        }
+    };
 
-export default AllBook
+    useEffect(() => {
+        getBook();
+    }, []);
 
-// import axios from 'axios';
-// import React, { useEffect, useState } from 'react';
+    const dltBook = async (id) => {
+        try {
+            const response = await axios.delete(
+                `http://localhost:9999/api/deleteBook/${id}`
+            );
 
-// const AllBook = () => {
+            alert(response.data.message);
+            getBook();
+        } catch (error) {
+            alert(error.response?.data?.message || "Error deleting book");
+        }
+    };
 
-//     const [bookdata, setBookdata] = useState([]);
+    return (
+        <div className="book-page">
+            <div className="table-container">
+                <div className="table-header">
+                    <h1 className="page-title">All Books</h1>
 
-//     useEffect(() => {
+                    <Link to="/" className="btn btn-primary">
+                        + Add Book
+                    </Link>
+                </div>
 
-//         axios.get('http://localhost:9999/api/viewbook')
-//             .then((response) => {
+                <table className="book-table">
+                    <thead>
+                        <tr>
+                            <th>Book Name</th>
+                            <th>Book Author</th>
+                            <th>Book Price</th>
+                            <th>Publication Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
 
-//                 console.log(response.data);
+                    <tbody>
+                        {bookdata.length > 0 ? (
+                            bookdata.map((book) => (
+                                <tr key={book._id}>
+                                    <td>{book.name}</td>
+                                    <td>{book.author}</td>
+                                    <td>₹{book.price}</td>
 
-//                 // if API returns array directly
-//                 setBookdata(response.data);
+                                    <td>
+                                        {book.public_date
+                                            ? new Date(book.public_date)
+                                                .toISOString()
+                                                .split('T')[0]
+                                            : ''}
+                                    </td>
 
-//                 // if API returns object like {data:[...]}
-//                 // setBookdata(response.data.data);
+                                    <td>
+                                        <span className={`status ${
+                                            book.status === 'enable'
+                                                ? 'status-enable'
+                                                : 'status-disable'
+                                        }`}>
+                                            {book.status}
+                                        </span>
+                                    </td>
 
-//             })
-//             .catch((error) => {
-//                 console.error(error);
-//             });
+                                    <td>
+                                        <div className="action-buttons">
+                                            <Link
+                                                to={`/updatebook/${book._id}`}
+                                                className="btn btn-primary"
+                                            >
+                                                Edit
+                                            </Link>
 
-//     }, []);
+                                            <button
+                                                className="btn btn-danger"
+                                                onClick={() => dltBook(book._id)}
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="6" className="empty-message">
+                                    No books found.
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+};
 
-//     return (
-//         <div>
-
-//             <h1>All Book</h1>
-
-//             <table border="1" cellPadding="10">
-
-//                 <thead>
-//                     <tr>
-//                         <th>Book Name</th>
-//                         <th>Book Author</th>
-//                         <th>Book Price</th>
-//                     </tr>
-//                 </thead>
-
-//                 <tbody>
-
-//                     {
-//                         Array.isArray(bookdata) &&
-//                         bookdata.map((book, index) => (
-
-//                             <tr key={index}>
-//                                 <td>{book.book_name}</td>
-//                                 <td>{book.book_author}</td>
-//                                 <td>{book.book_price}</td>
-//                             </tr>
-
-//                         ))
-//                     }
-
-//                 </tbody>
-
-//             </table>
-
-//         </div>
-//     );
-// };
-
-// export default AllBook;
+export default AllBook;

@@ -1,79 +1,123 @@
-import React, { useState } from 'react'
+
+import React, { useState } from 'react';
 import axios from 'axios';
 
 const CreateBook = () => {
-  const fieldset={
-    width:"500px",
-    padding:"10px",
-    margin:"auto",
-    borderRadius: "10px"
-  }
-
-  const [bookData,setBookData]=useState({
-    'book_name':"",
-    'book_author':"",
-    'book_price':""
-  })
-
-  const handleChange=(e)=>{
-    // const [name,value]=e.target;
-    const { name, value } = e.target;
-    setBookData({
-        ...bookData,[name]:value
+    const [bookData, setBookData] = useState({
+        name: "",
+        author: "",
+        price: "",
+        public_date: "",
+        status: ""
     });
-  }
 
-  const handleSubmit=async(e)=>{
+    const handleChange = (e) => {
+        const { name, value } = e.target;
 
-    e.preventDefault();
-    try{
-        const response=await axios.post('http://localhost:9999/api/addbook',bookData);
-        console.log(response.data);
         setBookData({
-             'book_name':"",
-             'book_author':"",
-             'book_price':""
-        })
-        
-    }
-    catch{
-        console.log("data insert error..");
-        
-    }
+            ...bookData,
+            [name]: value
+        });
+    };
 
-  }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await axios.post(
+                'http://localhost:9999/api/addbook',
+                bookData
+            );
+
+            alert(response.data.message);
+
+            setBookData({
+                name: "",
+                author: "",
+                price: "",
+                public_date: "",
+                status: ""
+            });
+        } catch (error) {
+            alert(error.response?.data?.message || "Error while adding book");
+            console.log(error);
+        }
+    };
+
     return (
-    <div>
-        <fieldset style={fieldset}>
-            <legend>Add Book</legend>
-            <table>
-                <tr>
-                    <td>Book Name</td>
-                    <td>
-                        <input type='text' name='book_name' value={bookData.book_name} onChange={handleChange}/>
-                    </td>
-                </tr>
-                                <tr>
-                    <td>Book Author</td>
-                    <td>
-                        <input type='text' name='book_author' value={bookData.book_author} onChange={handleChange}/>
-                    </td>
-                </tr>
-                                <tr>
-                    <td>Book Price</td>
-                    <td>
-                        <input type='text' name='book_price' value={bookData.book_price} onChange={handleChange}/>
-                    </td>
-                </tr>
-                <tr>
-                    <td colSpan={2} align='center'>
-                        <input type='button' value={"addBook"} name='AddBook' onClick={handleSubmit}/>
-                    </td>
-                </tr>
-            </table>
-        </fieldset>
-    </div>
-  )
-}
+        <div className="book-page">
+            <form className="book-form" onSubmit={handleSubmit}>
+                <fieldset>
+                    <legend>Add Book</legend>
 
-export default CreateBook
+                    <div className="form-group">
+                        <label>Book Name</label>
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Enter book name"
+                            value={bookData.name}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Book Author</label>
+                        <input
+                            type="text"
+                            name="author"
+                            placeholder="Enter author name"
+                            value={bookData.author}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Book Price</label>
+                        <input
+                            type="number"
+                            name="price"
+                            placeholder="Enter book price"
+                            value={bookData.price}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Publication Date</label>
+                        <input
+                            type="date"
+                            name="public_date"
+                            value={bookData.public_date}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Status</label>
+                        <select
+                            name="status"
+                            value={bookData.status}
+                            onChange={handleChange}
+                            required
+                        >
+                            <option value="">Select Status</option>
+                            <option value="enable">Enable</option>
+                            <option value="disable">Disable</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" className="btn btn-primary btn-full">
+                        Add Book
+                    </button>
+                </fieldset>
+            </form>
+        </div>
+    );
+};
+
+export default CreateBook;

@@ -1,8 +1,9 @@
-import logo from './logo.svg';
+
 import './App.css';
 import CreateBook from './components/CreateBook';
 import {BrowserRouter,Routes,Route} from 'react-router-dom';
 import AllBook from './components/AllBook';
+import UpdateBook from './components/UpdateBook';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <Routes>
         <Route path="/" element={<CreateBook/>}/>
         <Route path='/allBook' element={<AllBook/>}/>
+        <Route path='/updatebook/:id' element={<UpdateBook/>}/>
         </Routes>
     </BrowserRouter>
   );
