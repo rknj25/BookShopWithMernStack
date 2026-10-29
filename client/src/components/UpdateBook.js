@@ -15,29 +15,34 @@ const UpdateBook = () => {
         status: ""
     });
 
-    const getData = async () => {
-        try {
-            const response = await axios.get(
-                `https://bookshopwithmernstack-2.onrender.com/api/getbook/${id}`
-            );
-
-            const book = response.data.bdi;
-
-            setBdata({
-                name: book.name || "",
-                author: book.author || "",
-                price: book.price ?? "",
-                public_date: book.public_date
-                    ? new Date(book.public_date).toISOString().split('T')[0]
-                    : "",
-                status: book.status || ""
-            });
-        } catch (error) {
-            alert(error.response?.data?.message || "Error fetching book");
-        }
-    };
-
     useEffect(() => {
+        const getData = async () => {
+            try {
+                const response = await axios.get(
+                    `https://bookshopwithmernstack-2.onrender.com/api/getbook/${id}`
+                );
+
+                const book = response.data.bdi;
+
+                setBdata({
+                    name: book.name || "",
+                    author: book.author || "",
+                    price: book.price ?? "",
+                    public_date: book.public_date
+                        ? new Date(book.public_date)
+                            .toISOString()
+                            .split('T')[0]
+                        : "",
+                    status: book.status || ""
+                });
+            } catch (error) {
+                alert(
+                    error.response?.data?.message ||
+                    "Error fetching book"
+                );
+            }
+        };
+
         getData();
     }, [id]);
 
@@ -60,7 +65,10 @@ const UpdateBook = () => {
             alert(response.data.message);
             navigate('/allbook');
         } catch (error) {
-            alert(error.response?.data?.message || "Error updating book");
+            alert(
+                error.response?.data?.message ||
+                "Error updating book"
+            );
         }
     };
 
@@ -128,7 +136,10 @@ const UpdateBook = () => {
                         </select>
                     </div>
 
-                    <button type="submit" className="btn btn-success btn-full">
+                    <button
+                        type="submit"
+                        className="btn btn-success btn-full"
+                    >
                         Update Book
                     </button>
                 </fieldset>
