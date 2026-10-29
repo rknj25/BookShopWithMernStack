@@ -115,14 +115,11 @@ const CreateBook = () => {
                     <button type="submit" className="btn btn-primary btn-full">
                         Add Book
                     </button>
+                    <Link to={'/allbook'} className="btn btn-primary btn-full">View All Book</Link>
                 </fieldset>
+                
             </form>
-             <Link
-                                                            to={`/updatebook/${book._id}`}
-                                                            className="btn btn-primary"
-                                                        >
-                                                            Edit
-                                                        </Link>
+             
         </div>
     );
 };
